@@ -21,5 +21,6 @@
     openvpn_proto: "tcp"
     openvpn_topology: "subnet"
     openvpn_server_options:
-      - push "route 10.10.0.0 255.255.0.0"
-
+      - push "route 172.16.0.0 255.255.0.0"
+      - push "route 10.141.0.0 255.255.0.0"
+      - push "route 10.241.0.0 255.255.0.0"

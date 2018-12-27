@@ -23,6 +23,21 @@ MFA_USER=gauth
 MFA_DIR=/etc/openvpn/google-authenticator
 
 
+cat > ${BASE_CONFIG} <<EOF
+client
+tls-client
+dev tun
+proto tcp
+cipher BF-CBC
+remote aws-vpn-v2.listenlively.com 443
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+verb 7
+auth-user-pass
+key-direction 1
+EOF
 
 function build_key() {
   user_id=$1
@@ -92,7 +107,7 @@ function main() {
     echo "ERROR: TLS Auth key not found"
     exit 1
   fi
-
+  
   cat ${BASE_CONFIG} \
       <(echo -e '<ca>') \
       ${KEY_DIR}/ca.crt \
@@ -104,6 +119,8 @@ function main() {
       ${KEY_DIR}/ta.key \
       <(echo -e '</tls-auth>') \
       > ${OUTPUT_DIR}/${user_id}.ovpn
+
+
 
   echo "INFO: Key created in ${OUTPUT_DIR}/${user_id}.ovpn"
 
